@@ -1,0 +1,41 @@
+---
+import { cn } from "~/utils";
+import headerClasses from "./Header.module.css";
+import siteLogo from "~/assets/logo.png";
+
+interface Props {
+    class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<header class={className}>
+    <div
+        class={cn(
+            "header-inner border-rainbow",
+            "space-x-4 py-3 flex items-center justify-center rounded-full",
+        )}
+    >
+        <img src={siteLogo.src} class="w-16 h-auto" alt="Ria Cordero" />
+
+        <nav>
+            <ul
+                class="flex font-medium justify-center items-center space-x-4 text-xl tracking-tight"
+            >
+                <li>
+                    <a href="#about">About Me</a>
+                </li>
+                <li>
+                    <a href="#connect">Connect</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<style>
+    .header-inner {
+        box-shadow: 0px 0px 21.5px 0px #ff3d9a1a;
+    }
+</style>

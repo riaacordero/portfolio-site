@@ -1,0 +1,23 @@
+---
+import { cn } from "~/utils";
+
+interface Props {
+    class?: string;
+    bgColor?: string;
+    borderColor?: string;
+}
+
+const { class: className, bgColor, borderColor } = Astro.props;
+---
+
+<div
+    style={{ backgroundColor: bgColor, color: borderColor, borderColor }}
+    class={cn(
+        className,
+        "rounded-full px-8 py-2 border",
+        !bgColor && "bg-gray-200",
+        !borderColor && "text-gray-800 border-gray-800",
+    )}
+>
+    <slot />
+</div>

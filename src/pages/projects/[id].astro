@@ -1,0 +1,34 @@
+---
+import { getProjects } from "~/prismic";
+
+export async function getStaticPaths() {
+    return (await getProjects()).map((project) => ({
+        params: { id: project.id },
+    }));
+}
+
+const { id } = Astro.params;
+---
+
+<div data-project-id={id}></div>
+
+<script>
+    // get first div with data-project-id attribute
+    const div = document.querySelector("[data-project-id]") as HTMLDivElement;
+
+    if (div) {
+        // get project id from div
+        const projectId = div.dataset.projectId;
+
+        if (projectId) {
+            localStorage.setItem("project-id", projectId);
+        } else {
+            localStorage.removeItem("project-id");
+        }
+    }
+
+    console.log("Redirecting to home page...");
+
+    // redirect to home page
+    window.location.href = "/";
+</script>

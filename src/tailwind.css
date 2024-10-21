@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    position: relative;
+    @apply font-sans antialiased dark:bg-zinc-900;
+}
+
+/* grid background */
+body:before {
+    background-image: url(./grid.png);
+    background-size: 90px;
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+}
+
+.dark body:before {
+    background-image: url(./grid-dark.png);
+}
+
+.bg-rainbow {
+    background: linear-gradient(
+            90deg,
+            #ff3d9a 0%,
+            #f98d6d 24.5%,
+            #f3eb37 50%,
+            #28db5a 75%,
+            #731cff 100%
+        )
+        border-box;
+}
+
+.border-rainbow {
+    position: relative;
+    border-radius: 1.5rem;
+}
+
+.border-rainbow::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    z-index: -2;
+    border: 2px solid transparent;
+    background: linear-gradient(
+            90deg,
+            #ff3d9a 0%,
+            #f98d6d 24.5%,
+            #f3eb37 50%,
+            #28db5a 75%,
+            #731cff 100%
+        )
+        border-box;
+    mask:
+        linear-gradient(#fff 0 0) padding-box,
+        linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+}

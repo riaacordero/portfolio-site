@@ -1,0 +1,120 @@
+---
+import { cn } from "~/utils";
+import Card from "./Card.astro";
+import Tag from "./Tag.astro";
+import { ProjectsDocument } from "~/prismic.d";
+import { getProjectTags } from "~/prismic";
+import { asHTML } from "@prismicio/client";
+
+interface Props {
+    size?: "sm" | "md";
+    project: ProjectsDocument<string>;
+}
+
+const { size = "md", project } = Astro.props;
+const tags = await getProjectTags(
+    ...project.data.tags
+        .filter((t) => "tag" in t)
+        .map((t) => t.tag)
+        .filter((t) => "type" in t)
+        .map((t) => t.id),
+);
+
+const shortDescription = asHTML(project.data.short_description);
+---
+
+<Card
+    class:list={[
+        "showcase-card showcase-" + project.id,
+        "transition-[transform,background-color,box-shadow] shadow-none cursor-pointer hover:shadow-[#ff3d9a1a] hover:shadow-lg ease-in-out duration-150 translate-y-0 hover:-translate-y-2 scale-100 hover:scale-[1.02]",
+    ]}
+    data-project-id={project.id}
+>
+    <swiper-container
+        centered-slides="true"
+        autoplay-delay="2500"
+        allow-touch-move="false"
+        class={cn(
+            "image",
+            "w-full aspect-[16/9] rounded-2xl bg-gray-100 shadow-lg shadow-pink-400/20 overflow-hidden",
+        )}
+    >
+        {
+            project.data.images.map(({ image }) => (
+                <swiper-slide>
+                    <div
+                        class={cn(
+                            "image",
+                            "w-full aspect-[16/9] bg-cover bg-center",
+                        )}
+                        style={{
+                            backgroundImage: `url(${image.url})`,
+                        }}
+                    />
+                </swiper-slide>
+            ))
+        }
+    </swiper-container>
+
+    <div
+        class={cn("mt-4 space-y-6", {
+            "md:p-8": size === "md",
+        })}
+    >
+        <div class="space-y-2">
+            <p
+                class={cn("uppercase text-gray-400 dark:text-zinc-100", {
+                    "md:text-lg": size === "md",
+                })}
+            >
+                {project.data.type}
+            </p>
+            <h3
+                class={cn("text-2xl", {
+                    "md:text-3xl": size === "md",
+                })}
+            >
+                {project.data.name[0].text}
+            </h3>
+
+            <div set:html={shortDescription} />
+        </div>
+
+        <div class="flex items-center space-x-2">
+            {
+                tags.map((tag) => (
+                    <Tag
+                        bgColor={tag.data.background_color}
+                        borderColor={tag.data.border_color}
+                    >
+                        {tag.data.name}
+                    </Tag>
+                ))
+            }
+        </div>
+    </div>
+</Card>
+
+<style>
+    .image {
+        box-shadow: 0px 0px 21.5px 0px #ff3d9a1a;
+    }
+</style>
+
+<script>
+    import { register } from "swiper/element/bundle";
+    import { Autoplay } from "swiper/modules";
+    import { currentProjectId } from "~/store";
+
+    // For swiper element
+    register();
+
+    const showcaseCards = document.querySelectorAll(".showcase-card");
+    showcaseCards.forEach((card) => {
+        card.addEventListener("click", () => {
+            const projectId = card.getAttribute("data-project-id");
+            console.log(projectId);
+            currentProjectId.set(projectId);
+        });
+    });
+</script>

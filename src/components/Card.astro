@@ -1,0 +1,42 @@
+---
+import { cn } from "~/utils";
+
+interface Props {
+    title?: string;
+    class?: string;
+}
+
+const { title, class: className, ...props } = Astro.props;
+---
+
+<div
+    class={cn(
+        className,
+        "dark:text-white card border-rainbow p-6 flex flex-col bg-white/20 backdrop-blur-[2px]",
+    )}
+    {...props}
+>
+    {
+        title && (
+            <div class="pb-4">
+                <h2 class="text-xl font-medium tracking-tight">{title}</h2>
+            </div>
+        )
+    }
+    <div class="flex-1"><slot /></div>
+</div>
+
+<style>
+    @keyframes rotate {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .card {
+        border-radius: 1.5rem;
+    }
+</style>
