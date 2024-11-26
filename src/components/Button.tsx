@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { cn } from "~/utils";
 
-export default function Button<C extends React.ElementType = "button">({
+export default function Button<C extends React.ElementType>({
   as,
   className,
   children,
